@@ -58,27 +58,36 @@ FLIGHT_INFO = {
   },
   'KRK' => {
     'CLJ' => 62
-  },
+  }
 }
 # Flight times are from https://www.flighttimecalculator.org/
 
 START_TIMES = %w[14:00 14:30 15:00 15:30 16:00 16:30 17:00 17:30 18:00 18:30 19:00 19:30]
-DATE_RANGE = (Date.today >> 1)..(Date.today >> 2)
+DATE_RANGE = (Date.today + 20)..(Date.today + 23)
 
 def sample_time
-  START_TIME.sample(1)
+  index = Random.rand(0..11)
+  START_TIMES[index]
 end
 
-AIRPORTS.each { |code, info| Airport.create(code: code, country: info[0], city: info[1]) }
-DATE_RANGE.each do |flight_date|
-  FLIGHT_INFO.each do |from_airport|
-    from_airport.each do |to_airport|
-      next if to_airport == from_airport
+airports = AIRPORTS.map { |code, info| Airport.create(code: code, country: info[0], city: info[1]) }
 
-      to_airport.each do |dura|
-        Flight.create(departing_airport: from_airport, arriving_airport: to_airport,
-                      date: flight_date, time: sample_time, duration: dura)
-      end
+def obtain_flight_info(from, to)
+  FLIGHT_INFO[from][to] or FLIGHT_INFO[to][from]
+end
+
+def invalid_airport(from, to)
+  from == to || FLIGHT_INFO[from].nil?
+end
+
+DATE_RANGE.each do |flight_date|
+  airports.each do |from_airport|
+    airports.each do |to_airport|
+      next if invalid_airport(from_airport.code, to_airport.code)
+
+      Flight.create(departing_airport: from_airport, arriving_airport: to_airport,
+                    date: flight_date, time: sample_time,
+                    duration: obtain_flight_info(from_airport.code, to_airport.code))
     end
   end
 end

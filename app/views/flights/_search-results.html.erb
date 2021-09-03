@@ -1,0 +1,17 @@
+<div class="container is-mobile">
+  <div class="columns is-multiline">
+    <% @queried.each do |flight| %>
+      <div class="column is-one-third">
+        <div class="message is-primary">
+          <div class="message-body">
+            <%= radio_button :booking, :booked_flight, flight.id, checked: true %>
+            <p class="content"> From <%= flight.departing_airport.city %> to <%= flight.arriving_airport.city %></p>
+            <p class="content"><%= flight.date %> @ <%= flight.time.to_time.strftime('%a, %k:%M (%:z)') %></p>
+          </div>
+        </div>
+        <%= link_to 'Book flight', new_flight_booking_path(flight.id), 
+                    flight_id: flight.id, class: 'button is-danger is-text is-inverted' %>
+      </div>
+    <% end %>
+  </div>
+</div>
