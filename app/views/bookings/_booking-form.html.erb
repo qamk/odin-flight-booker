@@ -1,7 +1,9 @@
 <%= form_with model: [flight, booking] do |form| %>
-  <%= hidden_field_tag :flight_id, params[:flight_id] %>
+  <%= form.hidden_field :booked_flight, value: params[:flight_id] %>
+  <%= form.hidden_field :num_passengers , value: params[:passengers] %>
     <div class="columns">
       <div class="column is-half">
+
         <%= form.fields_for :passengers do |passengers_form| %>
           <header class="heading">Details for passenger #<%= count.shift %></header>
           <div class="columns">
@@ -23,6 +25,7 @@
             </div>
           </div>
         <% end %>
+
       </div>
     </div>
   <%= form.submit 'Confirm Booking', class: 'button is-success is-light' %>

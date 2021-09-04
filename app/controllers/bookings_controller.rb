@@ -1,10 +1,9 @@
 class BookingsController < ApplicationController
-
   # GET /flights/:flight_id/bookings/new
   def new
     redirect_to root_path unless valid_passengers?(num_passengers)
-    @flight = Flight.find(params[:flight_id])
     @booking = Booking.new
+    @flight = Flight.find(params[:flight_id])
     @count = (1..num_passengers).to_a
     @count.each { @booking.passengers.build }
   end
@@ -16,7 +15,8 @@ class BookingsController < ApplicationController
 
   # POST /flights/:flight_id/bookings
   def create
-    @booking = Booking.new(booking_params)
+    cleaned_booking_params = convert_ids(booking_params)
+    @booking = Booking.new(cleaned_booking_params)
     if @booking.save
       redirect_to booking_path(@booking), notice: 'Successfully booked flight'
     else
@@ -27,8 +27,14 @@ class BookingsController < ApplicationController
 
   private
 
+  def convert_ids(params)
+    params[:booked_flight] = Flight.find(params[:booked_flight].to_i)
+    params[:num_passengers] = params[:num_passengers].to_i
+    params
+  end
+
   def booking_params
-    params.require(:booking).permit(:booked_flight, passenger_attributes: %i[id email name])
+    params.require(:booking).permit(:booked_flight, :num_passengers, { passengers_attributes: %i[id email name] })
   end
 
   def num_passengers

@@ -4,7 +4,7 @@ class FlightsController < ApplicationController
     @dates = Flight.select(:date).distinct.pluck(:date)
     if valid_flight? && valid_passengers?(num_passengers)
       @queried = query_flights
-    else
+    elsif query_made?
       flash[:error] = 'Please ensure your query is valid'
     end
   end
@@ -19,6 +19,11 @@ class FlightsController < ApplicationController
   helper_method :valid_flight?
 
   private
+
+  def query_made?
+    query_param_keys = %i[departing_airport arriving_airport date num_passengers] 
+    params.keys.any? { |k| query_param_keys.include? k }
+  end
 
   def query_flights
     Flight.where(departing_airport: params[:departing_airport],
