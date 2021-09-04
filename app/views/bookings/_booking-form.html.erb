@@ -1,0 +1,29 @@
+<%= form_with model: [flight, booking] do |form| %>
+  <%= hidden_field_tag :flight_id, params[:flight_id] %>
+    <div class="columns">
+      <div class="column is-half">
+        <%= form.fields_for :passengers do |passengers_form| %>
+          <header class="heading">Details for passenger #<%= count.shift %></header>
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <%= passengers_form.label :email, 'Email' %>
+                <div class="control">
+                  <%= passengers_form.email_field :email, class: 'input' %>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <%= passengers_form.label :name, 'Name' %>
+                <div class="control">
+                  <%= passengers_form.text_field :name, class: 'input' %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <%= form.submit 'Confirm Booking', class: 'button is-success is-light' %>
+<% end %>

@@ -10,4 +10,8 @@ class ApplicationController < ActionController::Base
     "#{new_hour}:#{new_mins}"
   end
   helper_method :calculate_end_time
+
+  def valid_passengers?(num)
+    num.positive? && num <= 4
+  end
 end

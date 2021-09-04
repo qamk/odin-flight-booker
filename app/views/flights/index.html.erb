@@ -3,7 +3,7 @@
     <div class="section">
       <%= render 'search-form' %>
     </div>
-    <% if valid_search? %>
+    <% unless @queried.nil? || @queried.empty? %>
       <div class="section">
         <%= render 'search-results' %>
       </div>

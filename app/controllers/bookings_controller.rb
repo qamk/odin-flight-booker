@@ -2,9 +2,11 @@ class BookingsController < ApplicationController
 
   # GET /flights/:flight_id/bookings/new
   def new
-    redirect_to root_path if flash[:error]
+    redirect_to root_path unless valid_passengers?(num_passengers)
+    @flight = Flight.find(params[:flight_id])
     @booking = Booking.new
-    @booking.passenger.build
+    @count = (1..num_passengers).to_a
+    @count.each { @booking.passengers.build }
   end
 
   # GET /bookings/:id
@@ -27,6 +29,17 @@ class BookingsController < ApplicationController
 
   def booking_params
     params.require(:booking).permit(:booked_flight, passenger_attributes: %i[id email name])
+  end
+
+  def num_passengers
+    params[:passengers].to_i
+  end
+
+  def too_many_passengers?(num)
+    return false unless num.to_i > 4
+
+    flash[:error] = 'Too many passengers'
+    true
   end
 
 end

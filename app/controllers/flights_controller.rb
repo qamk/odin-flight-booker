@@ -2,34 +2,37 @@ class FlightsController < ApplicationController
   def index
     @airports = Airport.select(:id, :code, :city).map { |airport| ["#{airport.code} - #{airport.city}", airport.id] }
     @dates = Flight.select(:date).distinct.pluck(:date)
-    if valid_search?
-      @queried = Flight.where(query_params).includes(:departing_airport)
+    if valid_flight? && valid_passengers?(num_passengers)
+      @queried = query_flights
     else
-      flash[:error] = 'Departing and Arriving airport cannot be the same'
+      flash[:error] = 'Please ensure your query is valid'
     end
   end
 
   protected
 
-  def valid_search?
-    params[:departing_airport] != params[:arriving_airport]
+  def valid_flight?
+    a = params[:departing_airport]
+    b = params[:arriving_airport]
+    (a != b) && [a, b].none?(&:nil?)
   end
-  helper_method :valid_search?
+  helper_method :valid_flight?
 
   private
 
+  def query_flights
+    Flight.where(departing_airport: params[:departing_airport],
+                arriving_airport: params[:arriving_airport],
+                date: params[:date])
+          .includes(:departing_airport)
+      
+  end
 
-  def cleaned_query_params
-    query_params
-    date = Date.new(*(1..3).map { |num| params[:search]["date(#{num}i)"].to_i })
-    {
-      departing_airport: params[:search][:departing_airport],
-      arriving_airport: params[:search][:arriving_airport],
-      date: date
-    }
+  def num_passengers
+    params[:num_passengers].to_i
   end
 
   def query_params
-    params.permit(:departing_airport, :arriving_airport, :date)
+    params.permit(:departing_airport, :arriving_airport, :date, :num_passengers)
   end
 end

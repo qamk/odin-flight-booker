@@ -1,3 +1,4 @@
+<% passengers = [1, 2, 3, 4] %> <%# Better kept in the controller? %>
 <div class="level box">
   <div class="level-item">
     <%= form_with url: root_url, method: 'get' do |form| %>
@@ -8,7 +9,9 @@
             <div class="field">
               <%= form.label :departing_airport, 'From' %>
               <div class="control">
-                <%= select_tag(:departing_airport, options_for_select(@airports), selected: params[:departing_airport], class: 'select') %>
+                <div class="select">
+                  <%= select_tag(:departing_airport, options_for_select(@airports, params[:departing_airport])) %>
+                </div>
               </div>
             </div>
           </div>
@@ -19,7 +22,9 @@
             <div class="field">
               <%= form.label :arriving_airport, 'To' %>
               <div class="control">
-                <%= select_tag(:arriving_airport, options_for_select(@airports), selected: params[:arriving_airport], class: 'select') %>
+                <div class="select">
+                  <%= select_tag(:arriving_airport, options_for_select(@airports, params[:arriving_airport])) %>
+                </div>
               </div>
             </div>
           </div>
@@ -30,7 +35,22 @@
             <div class="field">
               <%= form.label :date, 'Date' %>
               <div class="control">
-                <%= select_tag(:date, options_for_select(@dates), selected: params[:date], class: 'select') %>
+                <div class="select">
+                  <%= select_tag(:date, options_for_select(@dates, params[:date])) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="level-item mx-2">
+          <div class="block">
+            <div class="field">
+              <%= form.label :num_passengers, 'Number of passengers' %>
+              <div class="control">
+                <div class="select">
+                  <%= select_tag(:num_passengers, options_for_select(passengers, params[:num_passengers])) %>
+                </div>
               </div>
             </div>
           </div>
@@ -38,7 +58,7 @@
 
         <div class="level-item mx-2 mt-5">
           <div class="block">
-            <%= form.submit 'Search airports', class: 'button is-small is-link'  %>
+            <%= form.submit 'Find Flights', class: 'button is-normal is-link'  %>
           </div>
         </div>
       </div>

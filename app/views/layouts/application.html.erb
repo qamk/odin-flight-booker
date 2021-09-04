@@ -11,6 +11,23 @@
   </head>
 
   <body>
+    <% if flash[:error] %>
+      <div class="notification is-danger">
+        <p class="content is-medium"><%= flash[:error] %></p>
+      </div>
+    <% end %>
+    <% if flash[:notice] %>
+      <div class="notification is-warning">
+        <p class="content is-medium"><%= flash[:notice] %></p>
+      </div>
+    <% end %>
+    <div class="navbar">
+      <div class="navbar-brand">
+        <%= link_to root_path, class: 'button is-primary is-dark is-inverted' do %>
+          <h4 class="title is-4 has-text-weight-normal has-text-primary-dark">Flight Booker</h4>
+        <% end %>
+      </div>
+    </div>
     <%= yield %>
   </body>
 </html>
