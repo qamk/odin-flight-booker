@@ -3,7 +3,7 @@ class BookingsController < ApplicationController
   def new
     redirect_to root_path unless valid_passengers?(num_passengers)
     @booking = Booking.new
-    @flight = Flight.find(params[:flight_id])
+    @flight = grab_flight
     @count = (1..num_passengers).to_a
     @count.each { @booking.passengers.build }
   end
@@ -21,6 +21,7 @@ class BookingsController < ApplicationController
       redirect_to booking_path(@booking), notice: 'Successfully booked flight'
     else
       flash.now[:error] = 'Failed to book ticket'
+      grab_flight
       render 'new'
     end
   end
@@ -46,6 +47,10 @@ class BookingsController < ApplicationController
 
     flash[:error] = 'Too many passengers'
     true
+  end
+
+  def grab_flight
+    Flight.find(params[:flight_id])
   end
 
 end
