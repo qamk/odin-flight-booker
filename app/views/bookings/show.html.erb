@@ -1,30 +1,42 @@
-<h2 class="title is-2">
-Booking for your flight from
-<strong class="has-text-semibold">
-<span class="has-text-link-dark"><%= @flight.departing_airport.city %></span> to 
-<span class="has-text-danger-dark"><%= @flight.arriving_airport.city %></span></strong>
-</h2>
+<div class="container">
+  <div class="level">
+    <div class="level-item has-text-centered">
+      <h2 class="title is-2">
+      Details for your flight from <br>
+      <strong class="has-text-semibold">
+      <span class="has-text-link-dark"><%= @flight.departing_airport.city %></span> to 
+      <span class="has-text-danger-dark"><%= @flight.arriving_airport.city %></span></strong>
+      </h2>
+    </div>
+  </div>
 
-<section class="section">
-  <div class="message is-info-dark">
-    <article class="message-body">
-      <div class="level">
-        <div class="level-left">
-          <div class="level-item">
-            <%= @flight.departing_airport.code %>
-          </div>
-          <div class="level-item">
-            <%= @flight.duration %>
-          </div>
-        </div>
-        <div class="level-right">
-          <div class="level-item">
-            <%= @flight.arriving_airport.code %>
+  <section class="section">
+    <div class="level">
+      <div class="level-item">
+        <div class="column is-one-third">
+          <div class="message is-info-dark">
+            <article class="message-body">
+              <div class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <%= @flight.departing_airport.code %>  ---------------
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    --------------> <%= @flight.arriving_airport.code %>
+                  </div>
+                </div>
+              </div>
+              <p class="content">Flight is on: <%= @flight.date.strftime('%d/%m/%Y') %></p>
+              <p class="content">Flight starts at: <%= @flight.time.strftime('%H:%M') %></p>
+              <p class="content">You are expected to arrive at:
+                <%= calculate_end_time(@flight.time.strftime('%H:%M'), @flight.duration) %>
+              </p>
+            </article>
           </div>
         </div>
       </div>
-      <p class="content"><%= @booking.date %></p>
-      <p class="content"><%= @booking.time %></p>
-    </article>
-  </div>
-</section>
+    </div>
+  </section>
+</div>

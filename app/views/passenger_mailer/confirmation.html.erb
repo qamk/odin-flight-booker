@@ -1,7 +1,7 @@
 <h2>Your booking has been confirmed!</h2>
 <blockquote>
   Your flight from <%= @flight_details[:departing].code %> to <%= @flight_details[:arriving].code %> <br>
-  Your flight is from <%= format_time(@flight_detailsp[:flight].time) %> to <%= @flight_details[:end_time] %> 
-  taking <%= @flight.duration %> mins!
+  Your flight is from <%= @flight_details[:start_time] %> to <%= @flight_details[:end_time] %> 
+  taking <%= @flight_details[:flight].duration %> mins!
 </blockquote>
-<p>Please ensure you arrive ideally 3 hours ahead of time.</p>
+<p>Please ensure you arrive 3 hours ahead of time.</p>

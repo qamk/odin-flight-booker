@@ -1,8 +1,10 @@
 class PassengerMailer < ApplicationMailer
+  include ApplicationHelper
+
   def confirmation(booking)
     @flight_details = extract_flight_details(booking.booked_flight)
     @passengers = booking.passengers
-    passengers_email = passengers.pluck(:email)
+    passengers_email = @passengers.pluck(:email)
     mail(to: passengers_email, subject: 'Your booking has been made!')
   end
 
@@ -15,7 +17,7 @@ class PassengerMailer < ApplicationMailer
     start_time = format_start(flight.time)
     {
       departing: departing_airport, arriving: arriving_airport,
-      end_time: calculate_end_time(start_time, duration),
+      end_time: calculate_end_time(start_time, duration), start_time: start_time,
       flight: flight
     }
   end

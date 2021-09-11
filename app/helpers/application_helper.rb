@@ -7,7 +7,7 @@ module ApplicationHelper
   end
 
   def calculate_end_time(start_time, duration)
-    start_time = format_start(start_time).split(':').map(&:to_i)
+    start_time = start_time.split(':').map(&:to_i)
     new_hour, new_mins = add_times(start_time, duration)
     zero_pad(new_hour, new_mins)
   end
@@ -23,7 +23,7 @@ module ApplicationHelper
   end
 
   # Returns formatted time as 'Hour:Minute' --> String
-  def formt_start(start_time)
+  def format_start(start_time)
     start_time.strftime('%H:%M')
   end
 
