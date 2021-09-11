@@ -1,2 +1,30 @@
-<h1>Bookings#show</h1>
-<p>Find me in app/views/bookings/show.html.erb</p>
+<h2 class="title is-2">
+Booking for your flight from
+<strong class="has-text-semibold">
+<span class="has-text-link-dark"><%= @flight.departing_airport.city %></span> to 
+<span class="has-text-danger-dark"><%= @flight.arriving_airport.city %></span></strong>
+</h2>
+
+<section class="section">
+  <div class="message is-info-dark">
+    <article class="message-body">
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <%= @flight.departing_airport.code %>
+          </div>
+          <div class="level-item">
+            <%= @flight.duration %>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+            <%= @flight.arriving_airport.code %>
+          </div>
+        </div>
+      </div>
+      <p class="content"><%= @booking.date %></p>
+      <p class="content"><%= @booking.time %></p>
+    </article>
+  </div>
+</section>

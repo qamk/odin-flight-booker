@@ -11,6 +11,7 @@ class BookingsController < ApplicationController
   # GET /bookings/:id
   def show
     @booking = Booking.find(params[:id])
+    @flight = @booking.booked_flight
   end
 
   # POST /flights/:flight_id/bookings
@@ -19,6 +20,7 @@ class BookingsController < ApplicationController
     @booking = Booking.new(cleaned_booking_params)
     if @booking.save
       redirect_to booking_path(@booking), notice: 'Successfully booked flight'
+      PassengerMailer.confirmation(@booking).deliver_now
     else
       flash.now[:error] = 'Failed to book ticket'
       grab_flight

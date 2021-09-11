@@ -7,8 +7,8 @@ module ApplicationHelper
   end
 
   def calculate_end_time(start_time, duration)
-    start = start_time.split(':').map(&:to_i)
-    new_hour, new_mins = add_times(start, duration)
+    start_time = format_start(start_time).split(':').map(&:to_i)
+    new_hour, new_mins = add_times(start_time, duration)
     zero_pad(new_hour, new_mins)
   end
   # helper_method :calculate_end_time
@@ -22,14 +22,21 @@ module ApplicationHelper
     vals
   end
 
+  # Returns formatted time as 'Hour:Minute' --> String
+  def formt_start(start_time)
+    start_time.strftime('%H:%M')
+  end
+
   private
 
+  # Returns an array with two elements --> Array
   def pad_to_array(val)
     return val if val.is_a? Array
 
     [val, 0]
   end
 
+  # Formats the final output string with one or no leading zeros --> String
   def zero_pad(new_hour, new_mins)
     if (new_mins / 10).zero?
       "#{new_hour}:0#{new_mins}"
@@ -40,8 +47,8 @@ module ApplicationHelper
     end
   end
 
+  # Adds values along a column --> Array
   def add_and_collapse(vals)
-    p vals
     vals.transpose.map { |val| val.reduce(&:+) }
   end
   
